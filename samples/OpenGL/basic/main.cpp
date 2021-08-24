@@ -7,21 +7,21 @@
 
 #include "./SSPlayer/SS6Player.h"
 
-//‰æ–ÊƒTƒCƒY
+//ç”»é¢ã‚µã‚¤ã‚º
 #define WIDTH (1280)
 #define HEIGHT (720)
 
-//FPS§Œä—p
-int nowtime = 0;	//Œo‰ßŠÔ
-int drawtime = 0;	//‘O‰ñ‚ÌŠÔ
+//FPSåˆ¶å¾¡ç”¨
+int nowtime = 0;	//çµŒéæ™‚é–“
+int drawtime = 0;	//å‰å›ã®æ™‚é–“
 
-//glut‚ÌƒR[ƒ‹ƒoƒbƒNŠÖ”
+//glutã®ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
 void mouse(int button, int state, int x, int y);
 void keyboard(unsigned char key, int x, int y);
 void idle(void);
 void disp(void);
 
-//ƒAƒvƒŠƒP[ƒVƒ‡ƒ“‚Ì§Œä
+//ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ã®åˆ¶å¾¡
 void Init();
 void update(float dt);
 void relese(void);
@@ -30,57 +30,57 @@ void draw(void);
 void userDataCallback(ss::Player* player, const ss::UserData* data);
 void playEndCallback(ss::Player* player);
 
-// SSƒvƒŒƒCƒ„[
+// SSãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼
 ss::Player *ssplayer;
 ss::ResourceManager *resman;
 
-//ƒAƒvƒŠƒP[ƒVƒ‡ƒ“‚Å‚Ì“ü—Í‘€ì—p
-bool nextanime = false;			//Ÿ‚ÌƒAƒjƒ‚ğÄ¶‚·‚é
-bool forwardanime = false;		//‘O‚ÌƒAƒjƒ‚ğÄ¶‚·‚é
+//ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ã§ã®å…¥åŠ›æ“ä½œç”¨
+bool nextanime = false;			//æ¬¡ã®ã‚¢ãƒ‹ãƒ¡ã‚’å†ç”Ÿã™ã‚‹
+bool forwardanime = false;		//å‰ã®ã‚¢ãƒ‹ãƒ¡ã‚’å†ç”Ÿã™ã‚‹
 bool pauseanime = false;
-int playindex = 0;				//Œ»İÄ¶‚µ‚Ä‚¢‚éƒAƒjƒ‚ÌƒCƒ“ƒfƒbƒNƒX
+int playindex = 0;				//ç¾åœ¨å†ç”Ÿã—ã¦ã„ã‚‹ã‚¢ãƒ‹ãƒ¡ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹
 int playerstate = 0;
-std::vector<std::string> animename;	//ƒAƒjƒ[ƒVƒ‡ƒ“–¼‚ÌƒŠƒXƒg
+std::vector<std::string> animename;	//ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³åã®ãƒªã‚¹ãƒˆ
 
 
-//ƒAƒvƒŠƒP[ƒVƒ‡ƒ“‚ÌƒƒCƒ“ŠÖ”ŠÖ”
+//ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ã®ãƒ¡ã‚¤ãƒ³é–¢æ•°é–¢æ•°
 int main(int argc, char ** argv) 
 {
-	//ƒ‰ƒCƒuƒ‰ƒŠ‰Šú‰»
-	glutInit(&argc, argv);				//GLUT‚Ì‰Šú‰»
-	//ƒEƒBƒ“ƒhƒEì¬
-	glutInitWindowPosition(100, 50);	//ƒEƒBƒ“ƒhƒEˆÊ’uİ’è
-	glutInitWindowSize(WIDTH, HEIGHT);	//ƒEƒBƒ“ƒhƒEƒTƒCƒYİ’è
-	glutInitDisplayMode(GLUT_RGBA | GLUT_STENCIL | GLUT_DEPTH | GLUT_DOUBLE);	//g—p‚·‚éƒoƒbƒtƒ@‚ğİ’è
-	glutCreateWindow("Sprite Studio SS6ssbpLib Sample");		//ƒEƒBƒ“ƒhƒEƒ^ƒCƒgƒ‹
+	//ãƒ©ã‚¤ãƒ–ãƒ©ãƒªåˆæœŸåŒ–
+	glutInit(&argc, argv);				//GLUTã®åˆæœŸåŒ–
+	//ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ä½œæˆ
+	glutInitWindowPosition(100, 50);	//ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ä½ç½®è¨­å®š
+	glutInitWindowSize(WIDTH, HEIGHT);	//ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚µã‚¤ã‚ºè¨­å®š
+	glutInitDisplayMode(GLUT_RGBA | GLUT_STENCIL | GLUT_DEPTH | GLUT_DOUBLE);	//ä½¿ç”¨ã™ã‚‹ãƒãƒƒãƒ•ã‚¡ã‚’è¨­å®š
+	glutCreateWindow("Sprite Studio SS6ssbpLib Sample");		//ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚¿ã‚¤ãƒˆãƒ«
 
 	GLenum err;
-	err = glewInit();					//GLEW‚Ì‰Šú‰»
+	err = glewInit();					//GLEWã®åˆæœŸåŒ–
 	if (err != GLEW_OK) {
 		std::cerr << glewGetErrorString(err) << '\n';
 		return 0;
 	}
 
-	glClearColor(0.0, 0.0, 0.2, 1.0);		//”wŒiF
+	glClearColor(0.0, 0.0, 0.2, 1.0);		//èƒŒæ™¯è‰²
 
-	//Š„‚è‚İİ’è	
-	glutIdleFunc(idle);			//ƒAƒCƒhƒ‹ƒR[ƒ‹ƒoƒbƒNİ’è
-	glutDisplayFunc(disp);		//•\¦ƒR[ƒ‹ƒoƒbƒNİ’è
-	glutKeyboardFunc(keyboard);	//ƒL[ƒ{[ƒh“ü—ÍƒR[ƒ‹ƒoƒbƒNİ’è
-	glutMouseFunc(mouse);		//ƒ}ƒEƒX“ü—ÍƒR[ƒ‹ƒoƒbƒNİ’è
+	//å‰²ã‚Šè¾¼ã¿è¨­å®š	
+	glutIdleFunc(idle);			//ã‚¢ã‚¤ãƒ‰ãƒ«ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯è¨­å®š
+	glutDisplayFunc(disp);		//è¡¨ç¤ºã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯è¨­å®š
+	glutKeyboardFunc(keyboard);	//ã‚­ãƒ¼ãƒœãƒ¼ãƒ‰å…¥åŠ›ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯è¨­å®š
+	glutMouseFunc(mouse);		//ãƒã‚¦ã‚¹å…¥åŠ›ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯è¨­å®š
 
 	Init();
 
-	glutMainLoop();				//ƒƒCƒ“ƒ‹[ƒv
+	glutMainLoop();				//ãƒ¡ã‚¤ãƒ³ãƒ«ãƒ¼ãƒ—
 	return 0;
 }
 
-//ƒL[ƒ{[ƒh“ü—ÍƒR[ƒ‹ƒoƒbƒN
+//ã‚­ãƒ¼ãƒœãƒ¼ãƒ‰å…¥åŠ›ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯
 void keyboard(unsigned char key, int x, int y)
 {
 	switch (key) {
 	case 27:	//esc
-		relese();					//ƒAƒvƒŠƒP[ƒVƒ‡ƒ“I—¹
+		relese();					//ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³çµ‚äº†
 		exit(0);
 		break;
 	case 122:	//z
@@ -97,16 +97,16 @@ void keyboard(unsigned char key, int x, int y)
 	}
 }
 
-//ƒ}ƒEƒX“ü—ÍƒR[ƒ‹ƒoƒbƒN
+//ãƒã‚¦ã‚¹å…¥åŠ›ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯
 void mouse(int button, int state, int x, int y)
 {
 }
 
-//ƒAƒCƒhƒ‹ƒR[ƒ‹ƒoƒbƒN
+//ã‚¢ã‚¤ãƒ‰ãƒ«ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯
 void idle(void) 
 {
-	//FPS‚Ìİ’è
-	nowtime = glutGet(GLUT_ELAPSED_TIME);//Œo‰ßŠÔ‚ğæ“¾
+	//FPSã®è¨­å®š
+	nowtime = glutGet(GLUT_ELAPSED_TIME);//çµŒéæ™‚é–“ã‚’å–å¾—
 	int wait = nowtime - drawtime;
 	if (wait > 16)
 	{
@@ -116,82 +116,82 @@ void idle(void)
 	}
 }
 
-//•`‰æƒR[ƒ‹ƒoƒbƒN
+//æç”»ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯
 void disp(void)
 {
-	//ƒŒƒ“ƒ_ƒŠƒ“ƒOŠJn‚Ì‰Šú‰»
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);	//ƒtƒŒ[ƒ€ƒoƒbƒtƒ@‚ÌƒNƒŠƒA
-	glDisable(GL_STENCIL_TEST);							//ƒXƒeƒ“ƒVƒ‹–³Œø‚É‚·‚é
-	glEnable(GL_DEPTH_TEST);							//[“xƒoƒbƒtƒ@‚ğ—LŒø‚É‚·‚é
-	glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);	//ƒtƒŒ[ƒ€ƒoƒbƒtƒ@‚ÖŠeF‚Ì‘‚«‚İ‚ğİ’è
+	//ãƒ¬ãƒ³ãƒ€ãƒªãƒ³ã‚°é–‹å§‹æ™‚ã®åˆæœŸåŒ–
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);	//ãƒ•ãƒ¬ãƒ¼ãƒ ãƒãƒƒãƒ•ã‚¡ã®ã‚¯ãƒªã‚¢
+	glDisable(GL_STENCIL_TEST);							//ã‚¹ãƒ†ãƒ³ã‚·ãƒ«ç„¡åŠ¹ã«ã™ã‚‹
+	glEnable(GL_DEPTH_TEST);							//æ·±åº¦ãƒãƒƒãƒ•ã‚¡ã‚’æœ‰åŠ¹ã«ã™ã‚‹
+	glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);	//ãƒ•ãƒ¬ãƒ¼ãƒ ãƒãƒƒãƒ•ã‚¡ã¸å„è‰²ã®æ›¸ãè¾¼ã¿ã‚’è¨­å®š
 
 	draw();
 
-	//I—¹ˆ—
-	glDisable(GL_DEPTH_TEST);	//[“xƒeƒXƒg‚ğ–³Œø‚É‚·‚é
-	glDisable(GL_ALPHA_TEST);	//ƒAƒ‹ƒtƒ@ƒeƒXƒg–³Œø‚É‚·‚é
-	glDisable(GL_TEXTURE_2D);	//ƒeƒNƒXƒ`ƒƒ–³Œø
-	glDisable(GL_BLEND);		//ƒuƒŒƒ“ƒh‚ğ–³Œø‚É‚·‚é
+	//çµ‚äº†å‡¦ç†
+	glDisable(GL_DEPTH_TEST);	//æ·±åº¦ãƒ†ã‚¹ãƒˆã‚’ç„¡åŠ¹ã«ã™ã‚‹
+	glDisable(GL_ALPHA_TEST);	//ã‚¢ãƒ«ãƒ•ã‚¡ãƒ†ã‚¹ãƒˆç„¡åŠ¹ã«ã™ã‚‹
+	glDisable(GL_TEXTURE_2D);	//ãƒ†ã‚¯ã‚¹ãƒãƒ£ç„¡åŠ¹
+	glDisable(GL_BLEND);		//ãƒ–ãƒ¬ãƒ³ãƒ‰ã‚’ç„¡åŠ¹ã«ã™ã‚‹
 
 	glutSwapBuffers();
 }
 
-//ƒAƒvƒŠƒP[ƒVƒ‡ƒ“‰Šú‰»ˆ—
+//ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³åˆæœŸåŒ–å‡¦ç†
 void Init()
 {
 	/**********************************************************************************
 
-	SpriteStudioƒAƒjƒ[ƒVƒ‡ƒ“•\¦‚ÌƒTƒ“ƒvƒ‹ƒR[ƒh
-	Visual Studio Community 2017‚Å“®ì‚ğŠm”F‚µ‚Ä‚¢‚Ü‚·B
-	WindowsSDK(ƒfƒXƒNƒgƒbƒvC++ x86‚¨‚æ‚Ñx64—p‚ÌWindows10 SDK)‚ğƒCƒ“ƒXƒg[ƒ‹‚·‚é•K—v‚ª‚ ‚è‚Ü‚·
-	ƒvƒƒWƒFƒNƒg‚ÌNuGet‚Åglut‚ğŒŸõ‚µnupengl.core‚ğ’Ç‰Á‚µ‚Ä‚­‚¾‚³‚¢B
+	SpriteStudioã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³è¡¨ç¤ºã®ã‚µãƒ³ãƒ—ãƒ«ã‚³ãƒ¼ãƒ‰
+	Visual Studio Community 2017ã§å‹•ä½œã‚’ç¢ºèªã—ã¦ã„ã¾ã™ã€‚
+	WindowsSDK(ãƒ‡ã‚¹ã‚¯ãƒˆãƒƒãƒ—C++ x86ãŠã‚ˆã³x64ç”¨ã®Windows10 SDK)ã‚’ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ã™ã‚‹å¿…è¦ãŒã‚ã‚Šã¾ã™
+	ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ãƒˆã®NuGetã§glutã‚’æ¤œç´¢ã—nupengl.coreã‚’è¿½åŠ ã—ã¦ãã ã•ã„ã€‚
 
-	ssbp‚Æpng‚ª‚ ‚ê‚ÎÄ¶‚·‚é–‚ª‚Å‚«‚Ü‚·‚ªAResourcesƒtƒHƒ‹ƒ_‚Ésspj‚àŠÜ‚Ü‚ê‚Ä‚¢‚Ü‚·B
+	ssbpã¨pngãŒã‚ã‚Œã°å†ç”Ÿã™ã‚‹äº‹ãŒã§ãã¾ã™ãŒã€Resourcesãƒ•ã‚©ãƒ«ãƒ€ã«sspjã‚‚å«ã¾ã‚Œã¦ã„ã¾ã™ã€‚
 
 	**********************************************************************************/
 
-	//ƒvƒŒƒCƒ„[‚ğg—p‚·‚é‘O‚Ì‰Šú‰»ˆ—
-	//‚±‚Ìˆ—‚ÍƒAƒvƒŠƒP[ƒVƒ‡ƒ“‚Ì‰Šú‰»‚Å‚P“x‚¾‚¯s‚Á‚Ä‚­‚¾‚³‚¢B
+	//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’ä½¿ç”¨ã™ã‚‹å‰ã®åˆæœŸåŒ–å‡¦ç†
+	//ã“ã®å‡¦ç†ã¯ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ã®åˆæœŸåŒ–ã§ï¼‘åº¦ã ã‘è¡Œã£ã¦ãã ã•ã„ã€‚
 	ss::SSPlatformInit();
-	//Y•ûŒü‚Ìİ’è‚ÆƒEƒBƒ“ƒhƒEƒTƒCƒYİ’è‚ğs‚¢‚Ü‚·
+	//Yæ–¹å‘ã®è¨­å®šã¨ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚µã‚¤ã‚ºè¨­å®šã‚’è¡Œã„ã¾ã™
 	ss::SSSetPlusDirection(ss::PLUS_UP, WIDTH, HEIGHT);
-	//ƒŠƒ\[ƒXƒ}ƒl[ƒWƒƒ‚Ìì¬
+	//ãƒªã‚½ãƒ¼ã‚¹ãƒãƒãƒ¼ã‚¸ãƒ£ã®ä½œæˆ
 	resman = ss::ResourceManager::getInstance();
-	//ƒvƒŒƒCƒ„[‚ğg—p‚·‚é‘O‚Ì‰Šú‰»ˆ—‚±‚±‚Ü‚Å
+	//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’ä½¿ç”¨ã™ã‚‹å‰ã®åˆæœŸåŒ–å‡¦ç†ã“ã“ã¾ã§
 
 
-	//ƒvƒŒƒCƒ„[‚Ìì¬
+	//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ä½œæˆ
 	ssplayer = ss::Player::create();
 
-	//ƒAƒjƒƒf[ƒ^‚ğƒŠƒ\[ƒX‚É’Ç‰Á
+	//ã‚¢ãƒ‹ãƒ¡ãƒ‡ãƒ¼ã‚¿ã‚’ãƒªã‚½ãƒ¼ã‚¹ã«è¿½åŠ 
 
-	//‚»‚ê‚¼‚ê‚Ìƒvƒ‰ƒbƒgƒtƒH[ƒ€‚É‡‚í‚¹‚½ƒpƒX‚Ö•ÏX‚µ‚Ä‚­‚¾‚³‚¢B
+	//ãã‚Œãã‚Œã®ãƒ—ãƒ©ãƒƒãƒˆãƒ•ã‚©ãƒ¼ãƒ ã«åˆã‚ã›ãŸãƒ‘ã‚¹ã¸å¤‰æ›´ã—ã¦ãã ã•ã„ã€‚
 	resman->addData("Resources/character_template_comipo/character_template1.ssbp");
-	//ƒvƒŒƒCƒ„[‚ÉƒŠƒ\[ƒX‚ğŠ„‚è“–‚Ä
-	ssplayer->setData("character_template1");						// ssbpƒtƒ@ƒCƒ‹–¼iŠg’£q•s—vj
-	//Ä¶‚·‚éƒ‚[ƒVƒ‡ƒ“‚ğİ’è
-	ssplayer->play("character_template_3head/stance");				// ƒAƒjƒ[ƒVƒ‡ƒ“–¼‚ğw’è(ssae–¼/ƒAƒjƒ[ƒVƒ‡ƒ“)
+	//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã«ãƒªã‚½ãƒ¼ã‚¹ã‚’å‰²ã‚Šå½“ã¦
+	ssplayer->setData("character_template1");						// ssbpãƒ•ã‚¡ã‚¤ãƒ«åï¼ˆæ‹¡å¼µå­ä¸è¦ï¼‰
+	//å†ç”Ÿã™ã‚‹ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ã‚’è¨­å®š
+	ssplayer->play("character_template_3head/stance");				// ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³åã‚’æŒ‡å®š(ssaeå/ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³)
 
 
-	//•\¦ˆÊ’u‚ğİ’è
+	//è¡¨ç¤ºä½ç½®ã‚’è¨­å®š
 	ssplayer->setPosition(WIDTH / 2, HEIGHT / 2);
 	ssplayer->setScale(0.5f, 0.5f);
 
-	//ƒ†[ƒU[ƒf[ƒ^ƒR[ƒ‹ƒoƒbƒN‚ğİ’è
+	//ãƒ¦ãƒ¼ã‚¶ãƒ¼ãƒ‡ãƒ¼ã‚¿ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã‚’è¨­å®š
 	ssplayer->setUserDataCallback(userDataCallback);
 
-	//ƒAƒjƒ[ƒVƒ‡ƒ“I—¹ƒR[ƒ‹ƒoƒbƒN‚ğİ’è
+	//ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³çµ‚äº†ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã‚’è¨­å®š
 	ssplayer->setPlayEndCallback(playEndCallback);
 
-	//ssbp‚ÉŠÜ‚Ü‚ê‚Ä‚¢‚éƒAƒjƒ[ƒVƒ‡ƒ“–¼‚ÌƒŠƒXƒg‚ğæ“¾‚·‚é
+	//ssbpã«å«ã¾ã‚Œã¦ã„ã‚‹ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³åã®ãƒªã‚¹ãƒˆã‚’å–å¾—ã™ã‚‹
 	animename = resman->getAnimeName(ssplayer->getPlayDataName());
-	playindex = 0;				//Œ»İÄ¶‚µ‚Ä‚¢‚éƒAƒjƒ‚ÌƒCƒ“ƒfƒbƒNƒX
+	playindex = 0;				//ç¾åœ¨å†ç”Ÿã—ã¦ã„ã‚‹ã‚¢ãƒ‹ãƒ¡ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹
 }
 
-//ƒAƒvƒŠƒP[ƒVƒ‡ƒ“XV
+//ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³æ›´æ–°
 void update(float dt)
 {
-	//ƒvƒŒƒCƒ„[‚ÌXVAˆø”‚Í‘O‰ñ‚ÌXVˆ—‚©‚çŒo‰ß‚µ‚½ŠÔ
+	//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®æ›´æ–°ã€å¼•æ•°ã¯å‰å›ã®æ›´æ–°å‡¦ç†ã‹ã‚‰çµŒéã—ãŸæ™‚é–“
 	ssplayer->update(dt);
 
 	if (nextanime == true)
@@ -232,45 +232,45 @@ void update(float dt)
 	}
 }
 
-//ƒ†[ƒU[ƒf[ƒ^ƒR[ƒ‹ƒoƒbƒN
+//ãƒ¦ãƒ¼ã‚¶ãƒ¼ãƒ‡ãƒ¼ã‚¿ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯
 void userDataCallback(ss::Player* player, const ss::UserData* data)
 {
-	//Ä¶‚µ‚½ƒtƒŒ[ƒ€‚Éƒ†[ƒU[ƒf[ƒ^‚ªİ’è‚³‚ê‚Ä‚¢‚éê‡ŒÄ‚Ño‚³‚ê‚Ü‚·B
-	//ƒvƒŒƒCƒ„[‚ğ”»’è‚·‚éê‡AƒQ[ƒ€‘¤‚ÅŠÇ—‚µ‚Ä‚¢‚éss::Player‚ÌƒAƒhƒŒƒX‚Æ”äŠr‚µ‚Ä”»’è‚µ‚Ä‚­‚¾‚³‚¢B
+	//å†ç”Ÿã—ãŸãƒ•ãƒ¬ãƒ¼ãƒ ã«ãƒ¦ãƒ¼ã‚¶ãƒ¼ãƒ‡ãƒ¼ã‚¿ãŒè¨­å®šã•ã‚Œã¦ã„ã‚‹å ´åˆå‘¼ã³å‡ºã•ã‚Œã¾ã™ã€‚
+	//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’åˆ¤å®šã™ã‚‹å ´åˆã€ã‚²ãƒ¼ãƒ å´ã§ç®¡ç†ã—ã¦ã„ã‚‹ss::Playerã®ã‚¢ãƒ‰ãƒ¬ã‚¹ã¨æ¯”è¼ƒã—ã¦åˆ¤å®šã—ã¦ãã ã•ã„ã€‚
 	/*
-	//ƒR[ƒ‹ƒoƒbƒN“à‚Åƒp[ƒc‚ÌƒXƒe[ƒ^ƒX‚ğæ“¾‚µ‚½‚¢ê‡‚ÍA‚±‚Ì“_‚Å‚ÍƒAƒjƒ‚ªXV‚³‚ê‚Ä‚¢‚È‚¢‚½‚ßA
-	//getPartState@‚É@data->frameNo@‚ÅƒtƒŒ[ƒ€”‚ğw’è‚µ‚Äæ“¾‚µ‚Ä‚­‚¾‚³‚¢B
+	//ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯å†…ã§ãƒ‘ãƒ¼ãƒ„ã®ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ã‚’å–å¾—ã—ãŸã„å ´åˆã¯ã€ã“ã®æ™‚ç‚¹ã§ã¯ã‚¢ãƒ‹ãƒ¡ãŒæ›´æ–°ã•ã‚Œã¦ã„ãªã„ãŸã‚ã€
+	//getPartStateã€€ã«ã€€data->frameNoã€€ã§ãƒ•ãƒ¬ãƒ¼ãƒ æ•°ã‚’æŒ‡å®šã—ã¦å–å¾—ã—ã¦ãã ã•ã„ã€‚
 	ss::ResluteState result;
-	//Ä¶‚µ‚Ä‚¢‚éƒ‚[ƒVƒ‡ƒ“‚ÉŠÜ‚Ü‚ê‚éƒp[ƒc–¼ucollisionv‚ÌƒXƒe[ƒ^ƒX‚ğæ“¾‚µ‚Ü‚·B
+	//å†ç”Ÿã—ã¦ã„ã‚‹ãƒ¢ãƒ¼ã‚·ãƒ§ãƒ³ã«å«ã¾ã‚Œã‚‹ãƒ‘ãƒ¼ãƒ„åã€Œcollisionã€ã®ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ã‚’å–å¾—ã—ã¾ã™ã€‚
 	ssplayer->getPartState(result, "collision", data->frameNo);
 	*/
 
 }
 
-//ƒAƒjƒ[ƒVƒ‡ƒ“I—¹ƒR[ƒ‹ƒoƒbƒN
+//ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³çµ‚äº†ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯
 void playEndCallback(ss::Player* player)
 {
-	//Ä¶‚µ‚½ƒAƒjƒ[ƒVƒ‡ƒ“‚ªI—¹‚µ‚½’iŠK‚ÅŒÄ‚Ño‚³‚ê‚Ü‚·B
-	//ƒvƒŒƒCƒ„[‚ğ”»’è‚·‚éê‡AƒQ[ƒ€‘¤‚ÅŠÇ—‚µ‚Ä‚¢‚éss::Player‚ÌƒAƒhƒŒƒX‚Æ”äŠr‚µ‚Ä”»’è‚µ‚Ä‚­‚¾‚³‚¢B
+	//å†ç”Ÿã—ãŸã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ãŒçµ‚äº†ã—ãŸæ®µéšã§å‘¼ã³å‡ºã•ã‚Œã¾ã™ã€‚
+	//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’åˆ¤å®šã™ã‚‹å ´åˆã€ã‚²ãƒ¼ãƒ å´ã§ç®¡ç†ã—ã¦ã„ã‚‹ss::Playerã®ã‚¢ãƒ‰ãƒ¬ã‚¹ã¨æ¯”è¼ƒã—ã¦åˆ¤å®šã—ã¦ãã ã•ã„ã€‚
 	//player->getPlayAnimeName();
-	//‚ğg—p‚·‚é–‚ÅÄ¶‚µ‚Ä‚¢‚éƒAƒjƒ[ƒVƒ‡ƒ“–¼‚ğæ“¾‚·‚é–‚à‚Å‚«‚Ü‚·B
+	//ã‚’ä½¿ç”¨ã™ã‚‹äº‹ã§å†ç”Ÿã—ã¦ã„ã‚‹ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³åã‚’å–å¾—ã™ã‚‹äº‹ã‚‚ã§ãã¾ã™ã€‚
 
-	//ƒ‹[ƒv‰ñ”•ªÄ¶‚µ‚½Œã‚ÉŒÄ‚Ño‚³‚ê‚é“_‚É’ˆÓ‚µ‚Ä‚­‚¾‚³‚¢B
-	//–³ŒÀƒ‹[ƒv‚ÅÄ¶‚µ‚Ä‚¢‚éê‡‚ÍƒR[ƒ‹ƒoƒbƒN‚ª”­¶‚µ‚Ü‚¹‚ñB
+	//ãƒ«ãƒ¼ãƒ—å›æ•°åˆ†å†ç”Ÿã—ãŸå¾Œã«å‘¼ã³å‡ºã•ã‚Œã‚‹ç‚¹ã«æ³¨æ„ã—ã¦ãã ã•ã„ã€‚
+	//ç„¡é™ãƒ«ãƒ¼ãƒ—ã§å†ç”Ÿã—ã¦ã„ã‚‹å ´åˆã¯ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ãŒç™ºç”Ÿã—ã¾ã›ã‚“ã€‚
 
 }
 
-//ƒAƒvƒŠƒP[ƒVƒ‡ƒ“•`‰æ
+//ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³æç”»
 void draw(void)
 {
-	//ƒvƒŒƒCƒ„[‚Ì•`‰æ
+	//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®æç”»
 	ssplayer->draw();
 }
 
-//ƒAƒvƒŠƒP[ƒVƒ‡ƒ“I—¹ˆ—
+//ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³çµ‚äº†å‡¦ç†
 void relese(void)
 {
-	//SSPlayer‚Ìíœ
+	//SSPlayerã®å‰Šé™¤
 	delete (ssplayer);
 	delete (resman);
 	ss::SSPlatformRelese( );
