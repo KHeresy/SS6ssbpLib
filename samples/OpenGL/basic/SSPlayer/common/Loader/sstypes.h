@@ -1,6 +1,7 @@
 ﻿#ifndef __SSTYPES__
 #define __SSTYPES__
 
+#include <cmath>
 #include <stdlib.h>
 #include <string>
 #include <vector>

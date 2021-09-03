@@ -1,1 +1,4 @@
 *.tlog
+*.user
+.vs/
+x64
